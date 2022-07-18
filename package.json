@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fs": "0.0.1-security",
     "node-schedule": "^2.1.0",
     "puppeteer": "^15.4.0"
   }
