@@ -16,7 +16,8 @@ const fs = require("fs");
 
 */
 //This will run every 1 hour, 0th minute, 0th second( ex: execute at 1PM, 2PM, 3PM etc):
-const job = schedule.scheduleJob("0 0 */1 * * *", function () {
+                                   
+const job = schedule.scheduleJob("*/30 * * * *", function () {
   console.log("The answer to life, the universe, and everything!");
   console.log(new Date());
   (async () => {
