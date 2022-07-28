@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 const https = require("https");
 const schedule = require("node-schedule");
+const axios = require('axios');
 const fs = require("fs");
 /*
 1    *    *    *    *    *
@@ -85,7 +86,7 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
   })();
 });
 
-/*
+
 (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -117,12 +118,14 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
                   fs.writeFileSync(fileName, campaign.campaign_slug+',',{flag:'a+'});                           
                   campaign.url =url+"/"+campaign.campaign_slug
                   console.log("Notificando de nueva campaña "+campaign.campaign_name);
+                  sendTelegramMessage(campaign);
                   sendSlackMessage(webHookURL, createMessage(campaign)).then(slackResponse =>{
                     console.log('Message response', slackResponse);
                   });
                   
                 }else{
-                  console.log("Ya se ha notificado");
+                  
+                  console.log("Ya se ha notificado "+campaign.campaign_slug);
                 }                
               });              
                 
@@ -142,7 +145,7 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
     
 })();
 
-*/
+
 
 function createMessage(result) {
   const { campaign_name, campaign_rate, target_date, funding_progress, url } =
@@ -184,6 +187,42 @@ function createMessage(result) {
       },
     ],
   };
+}
+
+function sendTelegramMessage(campaign){
+  
+    const options = {
+      method: 'POST',
+      url:'https://api.telegram.org/bot5553104402%3AAAFuQuvFlX59MqLM_RhZ1fMPAJLHF_vSxQ8/sendMessage',
+      headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+      data:{
+        text: `📢📢📢📢📢📢📢📢📢📢📢📢📢📢
+        <b>☘ Campaña: </b>${campaign.campaign_name}
+        <b>🤑 Tasa de Interés: </b>${campaign.campaign_name}
+        <b>Porcentaje de avance: </b>${campaign.funding_progress}%
+        <b>Fecha de Cierre: </b>${campaign.target_date}
+        <b>Proyecto: </b>",👉️ 
+         ${campaign.url}`,
+        parse_mode: 'HTML',
+        disable_web_page_preview: false,
+        disable_notification: false,
+        reply_to_message_id: null,
+        chat_id: '@Briqmxnot'
+      }
+    };
+
+
+
+      axios
+  .request(options)
+  .then(function (response) {
+    //console.log(response.data);
+    console.log("mensaje enviado a Telegram");
+  })
+  .catch(function (error) {
+    console.error(error);
+  });
+ 
 }
 
 function sendSlackMessage(webhookURL, messageBody) {
