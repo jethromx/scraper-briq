@@ -64,13 +64,14 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
               console.log(
                 "Notificando de nueva campaña " + campaign.campaign_name
               );
+              sendTelegramMessage(campaign);
               sendSlackMessage(webHookURL, createMessage(campaign)).then(
                 (slackResponse) => {
                   console.log("Message response", slackResponse);
                 }
               );
             } else {
-              console.log("Ya se ha notificado");
+              console.log("Ya se ha notificado "+campaign.campaign_slug);
             }
           });
         } else {
@@ -86,7 +87,7 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
   })();
 });
 
-
+/*
 (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -145,7 +146,7 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
     
 })();
 
-
+*/
 
 function createMessage(result) {
   const { campaign_name, campaign_rate, target_date, funding_progress, url } =
