@@ -94,7 +94,7 @@ const job = schedule.scheduleJob("*/30 * * * *", function () {
     const url = "https://www.briq.mx/proyectos";    
     const notValidProject = 'trust_rights';
     const divSearch= "div.hover-shadow-2 > a";
-    const webHookURL= 'https://hooks.slack.com/services/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';
+    const webHookURL= 'https://hooks.slack.com/services/ID';
     const fileName=  'validaciones.txt'  
 
     try {
